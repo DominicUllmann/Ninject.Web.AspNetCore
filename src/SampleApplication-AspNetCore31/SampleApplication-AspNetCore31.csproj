@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <DebugType>full</DebugType>
+    <RootNamespace>SampleApplication_AspNetCore22</RootNamespace>
+    <UserSecretsId>cba31371-2e46-4888-a024-8cfdeb164a68</UserSecretsId>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Ninject.Web.AspNetCore.Httpsys\Ninject.Web.AspNetCore.HttpSys.csproj" />
+    <ProjectReference Include="..\Ninject.Web.AspNetCore.IIS\Ninject.Web.AspNetCore.IIS.csproj" />
+    <ProjectReference Include="..\Ninject.Web.AspNetCore\Ninject.Web.AspNetCore.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.HostFiltering;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.HostFiltering;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using System;
@@ -41,7 +44,7 @@ namespace Ninject.Web.AspNetCore.Hosting
 		{
 			_builder.ConfigureAppConfiguration((WebHostBuilderContext hostingContext, IConfigurationBuilder config) =>
 			{
-				IHostingEnvironment hostingEnvironment = hostingContext.HostingEnvironment;
+				IWebHostEnvironment hostingEnvironment = hostingContext.HostingEnvironment;
 				config
 					.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
 					.AddJsonFile("appsettings." + hostingEnvironment.EnvironmentName + ".json", optional: true, reloadOnChange: true);
@@ -97,13 +100,43 @@ namespace Ninject.Web.AspNetCore.Hosting
 			return this;
 		}
 
+		public DefaultWebHostConfiguration ConfigureForwardedHeaders()
+		{
+			_builder.ConfigureServices((WebHostBuilderContext hostingContext, IServiceCollection services) =>
+			{
+				if (string.Equals("true", hostingContext.Configuration["ForwardedHeaders_Enabled"], StringComparison.OrdinalIgnoreCase))
+				{
+					services.Configure(delegate (ForwardedHeadersOptions options)
+					{
+						options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto;
+						options.KnownNetworks.Clear();
+						options.KnownProxies.Clear();
+					});
+					services.AddTransient<IStartupFilter, ForwardedHeadersStartupFilter>();
+				}
+			});
+
+			return this;
+		}
+
+		public DefaultWebHostConfiguration ConfigureRouting()
+		{
+			_builder.ConfigureServices((WebHostBuilderContext hostingContext, IServiceCollection services) =>
+			{
+				services.AddRouting();
+			});
+
+			return this;
+		}
+
 		public DefaultWebHostConfiguration ConfigureAll()
 		{
 			return this
 				.ConfigureContentRoot()
 				.ConfigureAppSettings()
 				.ConfigureLogging()
-				.ConfigureAllowedHosts();
+				.ConfigureAllowedHosts()
+				.ConfigureForwardedHeaders();
 		}
 
 		public IWebHostBuilder GetBuilder()
