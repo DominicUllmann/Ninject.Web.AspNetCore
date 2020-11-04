@@ -1,9 +1,14 @@
 ﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.Extensions.Options;
 using Ninject;
 using Ninject.Web.AspNetCore.Hosting;
 using Ninject.Web.Common.SelfHost;
+using Publication.Infrastructure.Service;
 using System;
 using System.Linq;
+using System.Reflection;
 
 namespace SampleApplication_AspNetCore31
 {
@@ -49,6 +54,14 @@ namespace SampleApplication_AspNetCore31
 		public static IKernel CreateKernel()
 		{
 			var kernel = new StandardKernel();
+			kernel.Load(Assembly.GetExecutingAssembly());
+
+			kernel.Bind<Lazy<IModelMetadataProvider>>().ToMethod(x =>
+				new Lazy<IModelMetadataProvider>(() => x.Kernel.Get<IModelMetadataProvider>()));
+
+			kernel.Bind<ControllerFromInterfacesConvention>().ToSelf().InTransientScope(); // no longer needed after startup => transient
+			kernel.Bind<IConfigureOptions<MvcOptions>>().To<ConfigureControllerConventionOptions>().InTransientScope(); // no longer needed after startup => transient
+
 			return kernel;
 		}
 
