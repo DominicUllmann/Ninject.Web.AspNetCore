@@ -23,9 +23,8 @@ namespace Ninject.Web.AspNetCore.Hosting
 		IServiceProvider IStartup.ConfigureServices(IServiceCollection services)
 		{
 			var mvcBuilder = services.AddMvc()
-				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+				.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 			ConfigureMvcOptions(mvcBuilder);
-			services.AddRouting();
 			ConfigureServices(services); // allow to customize the services before conversion to NInject bindings happen.
 			return _providerFactory.CreateBuilder(services).Build();
 		}
