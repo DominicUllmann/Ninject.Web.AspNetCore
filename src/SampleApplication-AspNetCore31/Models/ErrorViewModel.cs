@@ -1,6 +1,6 @@
 using System;
 
-namespace SampleApplication_AspNetCore22.Models
+namespace SampleApplication_AspNetCore31.Models
 {
     public class ErrorViewModel
     {

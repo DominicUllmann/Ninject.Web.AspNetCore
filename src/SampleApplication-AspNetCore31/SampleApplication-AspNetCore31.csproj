@@ -4,7 +4,7 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <DebugType>full</DebugType>
-    <RootNamespace>SampleApplication_AspNetCore22</RootNamespace>
+    <RootNamespace>SampleApplication-AspNetCore31</RootNamespace>
     <UserSecretsId>cba31371-2e46-4888-a024-8cfdeb164a68</UserSecretsId>
     <OutputType>Exe</OutputType>
   </PropertyGroup>

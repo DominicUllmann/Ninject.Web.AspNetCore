@@ -5,7 +5,7 @@ using Ninject.Web.Common.SelfHost;
 using System;
 using System.Linq;
 
-namespace SampleApplication_AspNetCore22
+namespace SampleApplication_AspNetCore31
 {
 	public class Program
 	{
